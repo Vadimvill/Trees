@@ -1,0 +1,5 @@
+﻿  hashTable.c
+C:\Users\botme\source\repos\trees\trees\hashTable.c(196,16): warning C4477: "printf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "char *"
+C:\Users\botme\source\repos\trees\trees\hashTable.c(393): warning C4715: writeValueInFile: значение возвращается не при всех путях выполнения
+C:\Users\botme\source\repos\trees\trees\hashTable.c(438): warning C4715: SetArraySize: значение возвращается не при всех путях выполнения
+  trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe
