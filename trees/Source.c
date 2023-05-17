@@ -10,8 +10,8 @@ int main() {
     printfCache(cache);
     int type = -1;
     int j = 0;
-    char* string;
-    char* value;
+    char* string = NULL;
+    char* value = NULL;
     while (1) {
         if (j != 0) {
             free(value);
