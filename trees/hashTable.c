@@ -221,7 +221,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
 
     free(current);
 }
-void addValueInCache(char* key,const char* value, Cache* cache) {
+void addValueInCache(char* key, const char* value, Cache* cache) {
     if (cache->size == cache->capacity) {
         deleteFromHashTable(cache->queue->tail->domain->domain, cache);
         removeTail(cache->queue);
@@ -272,33 +272,41 @@ int isDomenInFile(const char* key) {
 char findValueInFileAndWriteToStack(const char* key, Cache* cache, char* startKey) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r");
     char** temp = malloc(sizeof(char*) * 4);
-
+    for (int i = 0; i < 4; i++) {
+        temp[i] = malloc(sizeof(char) * 1024);
+    }
+    int b = -1;
     while (1) {
+        b = hz1(temp, file, key, startKey, cache);
+        if (b == 0) break;
         for (int i = 0; i < 4; i++) {
             temp[i] = malloc(sizeof(char) * 1024);
-        }
-        fscanf(file, "%s", temp[0]);
-        if (strcmp(temp[0], "$") == 0) break;
-        for (int i = 0; i < 3; i++) {
-            fscanf(file, "%s", temp[i + 1]);
-        }
-        if (strcmp(temp[0], key) == 0) {
-            if (handleFoundKey(key, temp[2], temp[3], startKey, cache)) {
-                fclose(file);
-                for (int i = 0; i < 4; i++) {
-                    free(temp[i]);
-                }
-                return 1;
-            }
-        }
-        else {
-            for (int i = 0; i < 4; i++) {
-                free(temp[i]);
-            }
         }
     }
 
     if (file != NULL) fclose(file);
+    return b;
+}
+char hz1(char** temp,FILE* file,const char* key, char* startKey, Cache* cache) {
+    fscanf(file, "%s", temp[0]);
+    if (strcmp(temp[0], "$") == 0) return 0;
+    for (int i = 0; i < 3; i++) {
+        fscanf(file, "%s", temp[i + 1]);
+    }
+    if (strcmp(temp[0], key) == 0) {
+        if (handleFoundKey(key, temp[2], temp[3], startKey, cache)) {
+            fclose(file);
+            for (int i = 0; i < 4; i++) {
+                free(temp[i]);
+            }
+            return 1;
+        }
+    }
+    else {
+        for (int i = 0; i < 4; i++) {
+            free(temp[i]);
+        }
+    }
     return 0;
 }
 char handleFoundKey(char* key, char* type, char* value, char* startKey, Cache* cache) {

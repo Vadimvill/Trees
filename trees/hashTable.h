@@ -45,7 +45,7 @@ void addValue(char* key, QueueNode* quequeNode, struct Cache* cache);
 char handleFoundKey(char* key, char* type, char* value, char* startKey, Cache* cache);
 QueueNode* findValue(char* key, Cache* cache);
 void deleteFromHashTable(char* key, struct Cache* cache);
-void addValueInCache(char* key,const char* value, Cache* cache);
+void addValueInCache(char* key, const char* value, Cache* cache);
 void printfCache(Cache* cache);
 int isDomenInFile(char* key);
 char findValueInFileAndWriteToStack(char* key, Cache* cache, char* startKey);
@@ -53,4 +53,4 @@ void readValueFromFile(Cache* cache);
 int writeValueInFile(int type, char* value, char* key, Cache* cache);
 void findAllIp(char* key);
 void clearTable(HastTable* table, size_t size);
-
+char hz1(char** temp, FILE* file, const char* key, char* startKey, Cache* cache);
