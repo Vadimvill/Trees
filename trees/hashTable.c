@@ -354,6 +354,7 @@ void readValueFromFile(Cache* cache) {
         }
 
     }
+    free(temp);
     if (file != NULL) fclose(file);
 }
 int writeValueInFile(int type, char* value, char* key, Cache* cache) {
@@ -371,6 +372,8 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
 
     if (type != 1 && type != 2) {
         printf("Invalid type\n");
+        fclose(fileLinks);
+        fclose(file);
         return 0;
     }
 
