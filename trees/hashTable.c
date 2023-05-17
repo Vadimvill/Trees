@@ -6,49 +6,34 @@ int isDigit(char ch) {
     return (ch >= '0' && ch <= '9');
 }
 int isValidIpAddress(const char* str) {
-    int num = 0;
-    int dots = 0;
-    const char* ptr;
+    int num, dots = 0;
+    char* ptr;
 
     if (str == NULL || strlen(str) < 7 || strlen(str) > 15)
         return 0;
 
     char* copy = _strdup(str);
-    char* context = NULL;
-    ptr = strtok_s(copy, ".", &context);
-
+    ptr = strtok(copy, ".");
 
     if (ptr == NULL)
-    {
-        free(copy);
         return 0;
-    }
-
 
     while (ptr) {
         if (!isDigit(*ptr))
-        {
-            free(copy);
             return 0;
-        }
 
         num = atoi(ptr);
 
-        if (num < 0 || num > 255) {
-            free(copy);
+        if (num < 0 || num > 255)
             return 0;
-        }
 
         dots++;
-        ptr = strtok_s(NULL, ".", &context);
+        ptr = strtok(NULL, ".");
 
         if (dots > 3 && ptr != NULL)
-        {
-            free(copy);
             return 0;
-        }
     }
-    free(context);
+
     free(copy);
 
     if (dots < 3)
@@ -56,8 +41,7 @@ int isValidIpAddress(const char* str) {
 
     return 1;
 }
-
-unsigned long hash(const char* str) {
+unsigned long hash(char* str) {
     unsigned int hash = 5381;
     char c;
 
@@ -101,25 +85,19 @@ void addElement(struct Queue* queque, Domain* domain) {
     queque->head->next->prev = queque->head;
 }
 
-void removeTail(struct Queue* queue) {
-    if (queue->tail == NULL) {
-        return;
+void removeTail(struct Queue* queque) {
+    QueueNode* temp = queque->tail;
+    if (queque->head == queque->tail) {
+        queque->head = NULL;
+        queque->tail = NULL;
     }
-    QueueNode* temp = queue->tail;
-    if (queue->head == queue->tail) {
-        queue->head = NULL;
-        queue->tail = NULL;
-    }
-    else {
-        queue->tail->prev->next = NULL;
-        queue->tail = queue->tail->prev;
-    }
+    queque->tail->prev->next = NULL;
+    queque->tail = queque->tail->prev;
     free(temp->domain->domain);
     free(temp->domain->ip);
     free(temp->domain);
     free(temp);
 }
-
 
 void clearQueque(QueueNode* head) {
     QueueNode* current = head;
@@ -178,17 +156,29 @@ QueueNode* findValue(char* key, Cache* cache) {
     if (cache->hastTable->table[index] == NULL) {
         return NULL;
     }
-
-    struct Node* node = cache->hastTable->table[index];
-    while (node != NULL) {
-        if (node->hash == hashCode && strcmp(node->queueNode->domain->domain, key) == 0) {
+    else {
+        struct Node* node = cache->hastTable->table[index];
+        if (node->hash == hashCode) {
             prioritize(cache->queue, node->queueNode);
             return node->queueNode;
         }
-        node = node->next;
+        while (node->next != NULL) {
+            if (node->hash == hashCode) {
+                if (strcmp(node->queueNode->domain->domain, key) == 0) {
+                    prioritize(cache->queue, node->queueNode);
+                    return node->queueNode;
+                }
+            }
+            node = node->next;
+        }
+        if (node->hash == hashCode) {
+            if (strcmp(node->queueNode->domain->domain, key) == 0) {
+                prioritize(cache->queue, node->queueNode);
+                return node->queueNode;
+            }
+        }
     }
     return NULL;
-    
 }
 void deleteFromHashTable(char* key, struct Cache* cache) {
     int index = hash(key) % cache->capacity;
@@ -203,7 +193,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
     }
 
     if (current == NULL) {
-        printf("Element with key %s not found in hash table.\n", key);
+        printf("Element with key %d not found in hash table.\n", key);
         return;
     }
 
@@ -216,7 +206,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
 
     free(current);
 }
-void addValueInCache(char* key,const char* value, Cache* cache) {
+void addValueInCache(char* key, char* value, Cache* cache) {
     if (cache->size == cache->capacity) {
         deleteFromHashTable(cache->queue->tail->domain->domain, cache);
         removeTail(cache->queue);
@@ -248,7 +238,7 @@ void printfCache(Cache* cache)
     }
     printf("\n");
 }
-int isDomenInFile(const char* key) {
+int isDomenInFile(char* key) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r");
     char** temp = malloc(sizeof(char*) * 4);
     for (int i = 0; i < 4; i++) {
@@ -264,7 +254,7 @@ int isDomenInFile(const char* key) {
     }
     return 0;
 }
-char findValueInFileAndWriteToStack(const char* key, Cache* cache, char* startKey) {
+char findValueInFileAndWriteToStack(char* key, Cache* cache, char* startKey) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r");
     char** temp = malloc(sizeof(char*) * 4);
 
@@ -274,30 +264,26 @@ char findValueInFileAndWriteToStack(const char* key, Cache* cache, char* startKe
         }
         fscanf(file, "%s", temp[0]);
         if (strcmp(temp[0], "$") == 0) break;
-        if (strcmp(temp[0], key) != 0) {
-            for (int i = 0;i < 3;i++) {
-                fscanf(file, "%s", temp[i + 1]);
-            }
-            for (int i = 0;i < 4;i++) {
-                free(temp[i]);
-            }
-            continue;
+        for (int i = 0;i < 3;i++) {
+            fscanf(file, "%s", temp[i + 1]);
         }
-        if (strcmp(temp[2], "A") == 0) {
-            addValueInCache(startKey, temp[3], cache);
-            return 1;
-        }
-        else if (strcmp(temp[2], "CNAME") == 0) {
-            fclose(file);
-            if (findValueInFileAndWriteToStack(temp[3], cache, startKey)) return 1;
-        }
-        else {
-            for (int i = 0;i < 4;i++) {
-                free(temp[i]);
+        if (strcmp(temp[0], key) == 0) {
+            if (strcmp(temp[2], "A") == 0) {
+                addValueInCache(startKey, temp[3], cache);
+                return 1;
             }
+            else if (strcmp(temp[2], "CNAME") == 0) {
+                fclose(file);
+                if (findValueInFileAndWriteToStack(temp[3], cache, startKey)) return 1;
+            }
+            else {
+                for (int i = 0;i < 4;i++) {
+                    free(temp[i]);
+                }
+            }
+
         }
     }
-
     if (file != NULL) fclose(file);
     return 0;
 }
@@ -328,7 +314,6 @@ void readValueFromFile(Cache* cache) {
         }
 
     }
-    free(temp);
     if (file != NULL) fclose(file);
 }
 int writeValueInFile(int type, char* value, char* key, Cache* cache) {
@@ -403,8 +388,8 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
             printf("valid type\n");
             return 0;
         }
+        return 1;
     }
-    return -1;
 }
 void findAllIp(char* key) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r");
@@ -453,4 +438,3 @@ int SetArraySize() {
     }
     return size;
 }
-

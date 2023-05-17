@@ -1,6 +1,4 @@
 ﻿  hashTable.c
-C:\Users\botme\source\repos\trees\trees\hashTable.c(60,32): warning C4028: формальный параметр 1 отличается от объявления
-C:\Users\botme\source\repos\trees\trees\hashTable.c(219,44): warning C4028: формальный параметр 2 отличается от объявления
-C:\Users\botme\source\repos\trees\trees\hashTable.c(251,31): warning C4028: формальный параметр 1 отличается от объявления
-C:\Users\botme\source\repos\trees\trees\hashTable.c(267,49): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(196,16): warning C4477: "printf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "char *"
+C:\Users\botme\source\repos\trees\trees\hashTable.c(393): warning C4715: writeValueInFile: значение возвращается не при всех путях выполнения
   trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe
