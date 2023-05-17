@@ -5,6 +5,5 @@ C:\Users\botme\source\repos\trees\trees\hashTable.c(256,31): warning C4028: фо
 C:\Users\botme\source\repos\trees\trees\hashTable.c(272,49): warning C4028: формальный параметр 1 отличается от объявления
 C:\Users\botme\source\repos\trees\trees\hashTable.c(312,27): warning C4028: формальный параметр 1 отличается от объявления
 C:\Users\botme\source\repos\trees\trees\hashTable.c(312,44): warning C4028: формальный параметр 2 отличается от объявления
-C:\Users\botme\source\repos\trees\trees\hashTable.c(367,10): warning C4101: line: неиспользованная локальная переменная
   Создание кода...
   trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe

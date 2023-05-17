@@ -221,7 +221,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
 
     free(current);
 }
-void addValueInCache(char* key, const char* value, Cache* cache) {
+void addValueInCache(const char* key, const char* value, Cache* cache) {
     if (cache->size == cache->capacity) {
         deleteFromHashTable(cache->queue->tail->domain->domain, cache);
         removeTail(cache->queue);
@@ -364,7 +364,6 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
     }
 
     int result = 0;
-    char line[1024];
 
     if (type == 1 && isValidIpAddress(value)) {
         fprintf(file, "%s\tIN A %s\n$", key, value);
@@ -387,7 +386,7 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
     return result;
 }
 
-void findAllIp(char* key) {
+void findAllIp(const char* key) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r");
     char** temp = malloc(sizeof(char*) * 4);
     while (1) {
