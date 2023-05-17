@@ -1,5 +1,3 @@
 ﻿  Source.c
 C:\Users\botme\source\repos\trees\trees\Source.c(8,1): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
-  hashTable.c
-  Создание кода...
   trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe

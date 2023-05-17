@@ -48,6 +48,7 @@ int main() {
             }
         }
         printf("%s\n", node->domain->ip);
+        free(value);
         printfCache(cache);
         rewind(stdin);
     }
