@@ -150,7 +150,7 @@ struct Cache* createCash(int capacity) {
     cache->hastTable = hastTable;
     return cache;
 }
-void addValue(char* key, QueueNode* quequeNode, struct Cache* cache) {
+void addValue(const char* key, QueueNode* quequeNode, struct Cache* cache) {
     unsigned long hashCode = hash(key);
     int index = hashCode % cache->capacity;
     if (cache->hastTable->table[index] == NULL) {
@@ -166,7 +166,7 @@ void addValue(char* key, QueueNode* quequeNode, struct Cache* cache) {
         node->next = newNode;
     }
 }
-QueueNode* findValue(char* key, Cache* cache) {
+QueueNode* findValue(const char* key, Cache* cache) {
     unsigned long hashCode = hash(key);
     int index = hashCode % cache->capacity;
     if (cache->hastTable->table[index] == NULL) {
@@ -275,7 +275,7 @@ char findValueInFileAndWriteToStack(const char* key, Cache* cache, char* startKe
     for (int i = 0; i < 4; i++) {
         temp[i] = malloc(sizeof(char) * 1024);
     }
-    int b = -1;
+    char b = -1;
     while (1) {
         b = hz1(temp, file, key, startKey, cache);
         if (b == 0) break;
@@ -294,7 +294,7 @@ char hz1(char** temp,FILE* file,const char* key, char* startKey, Cache* cache) {
         fscanf(file, "%s", temp[i + 1]);
     }
     if (strcmp(temp[0], key) == 0) {
-        if (handleFoundKey(key, temp[2], temp[3], startKey, cache)) {
+        if (handleFoundKey(temp[2], temp[3], startKey, cache)) {
             fclose(file);
             for (int i = 0; i < 4; i++) {
                 free(temp[i]);
@@ -309,14 +309,15 @@ char hz1(char** temp,FILE* file,const char* key, char* startKey, Cache* cache) {
     }
     return 0;
 }
-char handleFoundKey(char* key, char* type, char* value, char* startKey, Cache* cache) {
+char handleFoundKey(char* type,const char* value, char* startKey, Cache* cache) {
     if (strcmp(type, "A") == 0) {
         addValueInCache(startKey, value, cache);
         return 1;
     }
-    else if (strcmp(type, "CNAME") == 0) {
-        if (findValueInFileAndWriteToStack(value, cache, startKey)) return 1;
+    else if (strcmp(type, "CNAME") == 0 && findValueInFileAndWriteToStack(value, cache, startKey)) {
+        return 1;
     }
+
     return 0;
 }
 void readValueFromFile(Cache* cache) {
@@ -349,80 +350,43 @@ void readValueFromFile(Cache* cache) {
     if (file != NULL) fclose(file);
 }
 int writeValueInFile(int type, char* value, char* key, Cache* cache) {
-    FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r");
-    char** temp = malloc(sizeof(char*) * 4);
-    int bool = 1;
-    while (1) {
-        for (int i = 0;i < 4;i++) {
-            temp[i] = malloc(sizeof(char) * 1024);
-        }
-        fscanf(file, "%s", temp[0]);
-        if (strcmp(temp[0], "$") == 0) break;
-        for (int i = 0;i < 3;i++) {
-            fscanf(file, "%s", temp[i + 1]);
-        }
-        if (strcmp(temp[0], key) != 0 && strcmp(temp[3], key) != 0) {
-
-        }
-        else {
-            fclose(file);
-            return 0;
-        }
-    }
-    fclose(file);
-    file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r+");
+    FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r+");
     FILE* fileLinks = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r+");
-    if (bool) {
-        if (type == 2) {
-            fseek(file, -2, SEEK_END);
-            fseek(fileLinks, -2, SEEK_END);
-            if (isDomenInFile(value)) {
-                fprintf(file, "\n%s\tIN CNAME %s\n$", key, value);
-                findValueInFileAndWriteToStack(value, cache, value);
-                fprintf(fileLinks, "%s\tIN A %s\n$", key, cache->queue->head->domain->ip);
-                fclose(fileLinks);
-            }
-            else {
-                printf("error\n");
-                for (int i = 0;i < 4;i++) {
-                    free(temp[i]);
-                }
-                return 0;
-            }
-            fclose(file);
-            fclose(fileLinks);
-            return 1;
-        }
-        if (type == 1) {
-            if (isValidIpAddress(value)) {
-                fseek(file, -2, SEEK_END);
-                fseek(fileLinks, -2, SEEK_END);
-                fprintf(file, "%s\tIN A %s\n$", key, value);
-                addValueInCache(key, value, cache);
-                fprintf(fileLinks, "%s\tIN A %s\n$", cache->queue->head->domain->domain, cache->queue->head->domain->ip);
-                fclose(fileLinks);
-                fclose(file);
-                return 1;
-            }
-            else {
-                for (int i = 0;i < 4;i++) {
-                    free(temp[i]);
-                }
-                printf("valid ip\n");
-                return 0;
-            }
 
-        }
-        else {
-            for (int i = 0;i < 4;i++) {
-                free(temp[i]);
-            }
-            printf("valid type\n");
-            return 0;
-        }
-        return 1;
+    if (file == NULL || fileLinks == NULL) {
+        perror("Error opening file");
+        return 0;
     }
+
+    if (type != 1 && type != 2) {
+        printf("Invalid type\n");
+        return 0;
+    }
+
+    int result = 0;
+    char line[1024];
+
+    if (type == 1 && isValidIpAddress(value)) {
+        fprintf(file, "%s\tIN A %s\n$", key, value);
+        addValueInCache(key, value, cache);
+        fprintf(fileLinks, "%s\tIN A %s\n$", cache->queue->head->domain->domain, cache->queue->head->domain->ip);
+        result = 1;
+    }
+    else if (type == 2 && isDomenInFile(value)) {
+        fprintf(file, "\n%s\tIN CNAME %s\n$", key, value);
+        findValueInFileAndWriteToStack(value, cache, value);
+        fprintf(fileLinks, "%s\tIN A %s\n$", key, cache->queue->head->domain->ip);
+        result = 1;
+    }
+    else {
+        printf("Invalid value\n");
+    }
+
+    fclose(file);
+    fclose(fileLinks);
+    return result;
 }
+
 void findAllIp(char* key) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r");
     char** temp = malloc(sizeof(char*) * 4);

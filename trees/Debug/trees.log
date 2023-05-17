@@ -1,1 +1,10 @@
-﻿  trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe
+﻿  Source.c
+  hashTable.c
+C:\Users\botme\source\repos\trees\trees\hashTable.c(211,16): warning C4477: "printf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "char *"
+C:\Users\botme\source\repos\trees\trees\hashTable.c(256,31): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(272,49): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(312,27): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(312,44): warning C4028: формальный параметр 2 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(367,10): warning C4101: line: неиспользованная локальная переменная
+  Создание кода...
+  trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe
