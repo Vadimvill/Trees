@@ -20,18 +20,26 @@ int isValidIpAddress(const char* str) {
 
     while (ptr) {
         if (!isDigit(*ptr))
+        {
+            free(copy);
             return 0;
+        }
 
         num = atoi(ptr);
 
-        if (num < 0 || num > 255)
+        if (num < 0 || num > 255) {
+            free(copy);
             return 0;
+        }
 
         dots++;
         ptr = strtok(NULL, ".");
 
         if (dots > 3 && ptr != NULL)
+        {
+            free(copy);
             return 0;
+        }
     }
 
     free(copy);
@@ -85,19 +93,25 @@ void addElement(struct Queue* queque, Domain* domain) {
     queque->head->next->prev = queque->head;
 }
 
-void removeTail(struct Queue* queque) {
-    QueueNode* temp = queque->tail;
-    if (queque->head == queque->tail) {
-        queque->head = NULL;
-        queque->tail = NULL;
+void removeTail(struct Queue* queue) {
+    if (queue->tail == NULL) {
+        return;
     }
-    queque->tail->prev->next = NULL;
-    queque->tail = queque->tail->prev;
+    QueueNode* temp = queue->tail;
+    if (queue->head == queue->tail) {
+        queue->head = NULL;
+        queue->tail = NULL;
+    }
+    else {
+        queue->tail->prev->next = NULL;
+        queue->tail = queue->tail->prev;
+    }
     free(temp->domain->domain);
     free(temp->domain->ip);
     free(temp->domain);
     free(temp);
 }
+
 
 void clearQueque(QueueNode* head) {
     QueueNode* current = head;
@@ -193,7 +207,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
     }
 
     if (current == NULL) {
-        printf("Element with key %d not found in hash table.\n", key);
+        printf("Element with key %s not found in hash table.\n", key);
         return;
     }
 
@@ -314,6 +328,7 @@ void readValueFromFile(Cache* cache) {
         }
 
     }
+    free(temp);
     if (file != NULL) fclose(file);
 }
 int writeValueInFile(int type, char* value, char* key, Cache* cache) {
@@ -388,8 +403,8 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
             printf("valid type\n");
             return 0;
         }
-        return 1;
     }
+    return -1;
 }
 void findAllIp(char* key) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r");
@@ -435,4 +450,5 @@ float SetArraySize(float a) {
         a = SetArraySize(a);
     }
     else return a;
+    return -1;
 }

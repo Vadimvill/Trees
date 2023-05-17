@@ -8,11 +8,11 @@ int main() {
     int a = SetArraySize(0);
     Cache* cache = createCash(a);
     // readValueFromFile(cache);
-    char* string = malloc(sizeof(char) * 1024);
-    char* value = malloc(sizeof(char) * 1024);
     printfCache(cache);
     int type = -1;
     while (1) {
+        char* string = malloc(sizeof(char) * 1024);
+        char* value = malloc(sizeof(char) * 1024);
         printf("set domain or ip or 3 to exit\n");
         scanf("%s", string);
         if (strcmp(string, "3") == 0) {
@@ -39,6 +39,8 @@ int main() {
                 continue;
             }
         }
+        free(string);
+        free(value);
         printf("%s\n", node->domain->ip);
         printfCache(cache);
         rewind(stdin);
