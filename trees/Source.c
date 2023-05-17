@@ -45,6 +45,8 @@ int main() {
                 free(string);
                 continue;
             }
+            free(value);
+            free(string);
         }
         printf("%s\n", node->domain->ip);
         printfCache(cache);

@@ -101,19 +101,25 @@ void addElement(struct Queue* queque, Domain* domain) {
     queque->head->next->prev = queque->head;
 }
 
-void removeTail(struct Queue* queque) {
-    QueueNode* temp = queque->tail;
-    if (queque->head == queque->tail) {
-        queque->head = NULL;
-        queque->tail = NULL;
+void removeTail(struct Queue* queue) {
+    if (queue->tail == NULL) {
+        return;
     }
-    queque->tail->prev->next = NULL;
-    queque->tail = queque->tail->prev;
+    QueueNode* temp = queue->tail;
+    if (queue->head == queue->tail) {
+        queue->head = NULL;
+        queue->tail = NULL;
+    }
+    else {
+        queue->tail->prev->next = NULL;
+        queue->tail = queue->tail->prev;
+    }
     free(temp->domain->domain);
     free(temp->domain->ip);
     free(temp->domain);
     free(temp);
 }
+
 
 void clearQueque(QueueNode* head) {
     QueueNode* current = head;
@@ -208,7 +214,7 @@ void deleteFromHashTable(char* key, struct Cache* cache) {
     }
 
     if (current == NULL) {
-        printf("Element with key %d not found in hash table.\n", key);
+        printf("Element with key %s not found in hash table.\n", key);
         return;
     }
 
@@ -344,6 +350,7 @@ void readValueFromFile(Cache* cache) {
             for (int i = 0;i < 4;i++) {
                 free(temp[i]);
             }
+
         }
 
     }
@@ -353,8 +360,12 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r+");
     FILE* fileLinks = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r+");
 
-    if (file == NULL || fileLinks == NULL) {
-        perror("Error opening file");
+    if (file == NULL) {
+        fclose(file);
+        return 0;
+    }
+    if (fileLinks == NULL) {
+        fclose(fileLinks);
         return 0;
     }
 
