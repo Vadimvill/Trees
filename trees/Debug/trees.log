@@ -1,3 +1,6 @@
-﻿  Source.c
-C:\Users\botme\source\repos\trees\trees\Source.c(8,1): warning C4244: инициализация: преобразование "float" в "int", возможна потеря данных
+﻿  hashTable.c
+C:\Users\botme\source\repos\trees\trees\hashTable.c(60,32): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(219,44): warning C4028: формальный параметр 2 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(251,31): warning C4028: формальный параметр 1 отличается от объявления
+C:\Users\botme\source\repos\trees\trees\hashTable.c(267,49): warning C4028: формальный параметр 1 отличается от объявления
   trees.vcxproj -> C:\Users\botme\source\repos\trees\Debug\trees.exe

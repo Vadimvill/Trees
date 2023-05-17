@@ -30,7 +30,7 @@ typedef struct Cache {
     int size;
     Queue* queue;
 }Cache;
-float SetArraySize(float a);
+int SetArraySize();
 int isDigit(char ch);
 int isValidIpAddress(const char* str);
 unsigned long hash(char* str);

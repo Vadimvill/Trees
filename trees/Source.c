@@ -5,9 +5,8 @@
 
 int main() {
     printf("set capacity of cache\n");
-    int a = SetArraySize(0);
+    int a = SetArraySize();
     Cache* cache = createCash(a);
-    // readValueFromFile(cache);
     printfCache(cache);
     int type = -1;
     while (1) {
