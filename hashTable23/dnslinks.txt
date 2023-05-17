@@ -1,0 +1,2 @@
+google.com IN A 132.211.32.134google2.com	IN A 132.211.32.134yandex.com	IN A 1.1.1.1lms.bsuir.by	IN A 123.21.32.21lms.bsuir2.by	IN A 123.21.32.21yandex2.com	IN A 1.1.1.1google5.com	IN A 132.211.32.134yandex6.com	IN A 1.1.1.1google12.com	IN A 132.211.32.134lol.com	IN A 132.32.12.32lol2.com	IN A 132.32.12.32
+$

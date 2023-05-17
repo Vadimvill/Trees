@@ -1,0 +1,11 @@
+google.com IN A 132.211.32.134
+google2.com	IN CNAME google.com
+yandex.com	IN A 1.1.1.1
+lms.bsuir.by IN A 123.21.32.21
+lms.bsuir2.by IN CNAME lms.bsuir.by
+yandex2.com	IN CNAME yandex.com
+google5.com	IN CNAME google2.com
+yandex6.com	IN CNAME yandex2.com
+google12.com	IN CNAME google2.comlol.com	IN A 132.32.12.32
+lol2.com	IN CNAME lol.com
+$
