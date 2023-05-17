@@ -9,30 +9,32 @@ int main() {
     Cache* cache = createCash(a);
     printfCache(cache);
     int type = -1;
+    int j = 0;
+    char* string;
+    char* value;
     while (1) {
-        char* string = malloc(sizeof(char) * 1024);
-        char* value = malloc(sizeof(char) * 1024);
+        if (j != 0) {
+            free(value);
+            free(string);
+        }
+        j++;
+        string = malloc(sizeof(char) * 1024);
+        value = malloc(sizeof(char) * 1024);
         printf("set domain or ip or 3 to exit\n");
         scanf("%s", string);
         if (strcmp(string, "3") == 0) {
             clearQueque(cache->queue->head);
             clearTable(cache->hastTable, cache->size);
-            free(value);
-            free(string);
             break;
         }
         if (isValidIpAddress(string)) {
             findAllIp(string);
-            free(value);
-            free(string);
             continue;
         }
         QueueNode* node = findValue(string, cache);
         if (node == NULL) {
             if (findValueInFileAndWriteToStack(string, cache, string) == 1) {
                 node = cache->queue->head;
-                free(value);
-                free(string);
             }
             else {
                 printf("domen not found, set ip\n");
@@ -41,16 +43,14 @@ int main() {
                 scanf("%d", &type);
                 writeValueInFile(type, value, string, cache);
                 rewind(stdin);
-                free(value);
-                free(string);
                 continue;
             }
-            free(value);
-            free(string);
         }
         printf("%s\n", node->domain->ip);
         printfCache(cache);
         rewind(stdin);
     }
+    free(value);
+    free(string);
     return 0;
 }
