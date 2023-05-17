@@ -7,9 +7,6 @@ int main() {
     printf("set capacity of cache\n");
     int a = SetArraySize();
     Cache* cache = createCash(a);
-    // readValueFromFile(cache);
-    char* string = malloc(sizeof(char) * 1024);
-    char* value = malloc(sizeof(char) * 1024);
     printfCache(cache);
     int type = -1;
     while (1) {
