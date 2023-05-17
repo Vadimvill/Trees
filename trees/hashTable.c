@@ -16,7 +16,11 @@ int isValidIpAddress(const char* str) {
     ptr = strtok(copy, ".");
 
     if (ptr == NULL)
+    {
+        free(copy);
         return 0;
+    }
+
 
     while (ptr) {
         if (!isDigit(*ptr))

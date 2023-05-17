@@ -18,16 +18,22 @@ int main() {
         if (strcmp(string, "3") == 0) {
             clearQueque(cache->queue->head);
             clearTable(cache->hastTable, cache->size);
+            free(string);
+            free(value);
             break;
         }
         if (isValidIpAddress(string)) {
             findAllIp(string);
+            free(string);
+            free(value);
             continue;
         }
         QueueNode* node = findValue(string, cache);
         if (node == NULL) {
             if (findValueInFileAndWriteToStack(string, cache, string) == 1) {
                 node = cache->queue->head;
+                free(string);
+                free(value);
             }
             else {
                 printf("domen not found, set ip\n");
@@ -36,11 +42,11 @@ int main() {
                 scanf("%d", &type);
                 writeValueInFile(type, value, string, cache);
                 rewind(stdin);
+                free(string);
+                free(value);
                 continue;
             }
         }
-        free(string);
-        free(value);
         printf("%s\n", node->domain->ip);
         printfCache(cache);
         rewind(stdin);
