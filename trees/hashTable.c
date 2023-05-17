@@ -361,14 +361,12 @@ int writeValueInFile(int type, char* value, char* key, Cache* cache) {
     FILE* file = fopen("C:\\Users\\botme\\hashTable\\dns.txt", "r+");
     FILE* fileLinks = fopen("C:\\Users\\botme\\hashTable\\dnslinks.txt", "r+");
 
-    if (file == NULL) {
-        fclose(file);
+    if (file == NULL || fileLinks == NULL) {
+        if (file != NULL) fclose(file);
+        if (fileLinks != NULL) fclose(fileLinks);
         return 0;
     }
-    if (fileLinks == NULL) {
-        fclose(fileLinks);
-        return 0;
-    }
+    
 
     if (type != 1 && type != 2) {
         printf("Invalid type\n");
